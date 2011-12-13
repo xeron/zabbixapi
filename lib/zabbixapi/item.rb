@@ -147,7 +147,7 @@ module Zabbix
           'params' => [ item_ids ]
         }
       else
-        raise Zabbix::ArgumentError.new("Zabbix::ZabbixApi.delete_item argument error. item_ids => #{item_ids.inspect}")
+        raise ZabbixError.new("Zabbix::ZabbixApi.delete_item argument error. item_ids => #{item_ids.inspect}")
       end
 
       response = send_request(message)

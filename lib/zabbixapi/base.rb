@@ -6,31 +6,15 @@ require 'net/https'
 
 module Zabbix
 
-  class SocketError < RuntimeError
-  end
-
-  class ResponseCodeError < RuntimeError
-  end
-
-  class ResponseError < RuntimeError
-  end
-
-  class AlreadyExist < RuntimeError
-  end
-
-  class ArgumentError < RuntimeError
+  class ZabbixError < RuntimeError
   end
 
   class ZabbixApi
 
-    attr_accessor :debug
-
-    def initialize ( api_url, api_user, api_password )
+    def initialize (api_url, api_user, api_password)
       @api_url = api_url
       @api_user = api_user
       @api_password = api_password
-
-      @debug = false # Disable debug by default
     end
 
     def do_request(message)
@@ -55,44 +39,33 @@ module Zabbix
       request.body=(message_json)
 
       begin
-        puts "[ZBXAPI] : INFO : Do request. Body => #{request.body}" if @debug
         response = http.request(request)
-      rescue ::SocketError => e
-        puts "[ZBXAPI] : ERROR : SocketError => #{e.message}" if @debug
-        raise Zabbix::SocketError.new(e.message)
-      end
-
-      if @debug
-        puts "[ZBXAPI] : INFO : Response start"
-        puts response
-        puts "[ZBXAPI] : INFO : Response end"
+      rescue SocketError => e
+        raise ZabbixError.new("Could not connect to #{@api_url}: #{e.message}")
       end
 
       if response.code != "200"
-        raise Zabbix::ResponseCodeError.new("Responce code from [" + @api_url + "] is #{response.code}")
+        raise ZabbixError.new("Response code is #{response.code}")
       end
 
       response_body_hash = JSON.parse(response.body)
 
-      if error = response_body_hash['error']
-        error_message = error['message']
-        error_data = error['data']
-        error_code = error['code']
+      if response_body_hash.include?('error')
 
-        e_message = "Code: [" + error_code.to_s + "]. Message: [" + error_message +\
-              "]. Data: [" + error_data + "]."
+        e_message = response_body_hash['error']['message']
+        e_data = response_body_hash['error']['data']
+        e_code = response_body_hash['error']['code']
 
-        case error_code.to_s
-        when '-32602'
-          raise Zabbix::AlreadyExist.new(e_message)
+        error_message = "Code: #{e_code.to_s}. Data: #{e_data}. Message: #{e_message}."
+
+        if e_code == -32602
+          raise ZabbixError.new("Object already exists. #{error_message}")
         else
-          raise Zabbix::ResponseError.new(e_message)
+          raise ZabbixError.new(error_message)
         end
       end
 
-      result = response_body_hash['result']
-
-      return result
+      response_body_hash['result']
     end
 
     def send_request(message)
