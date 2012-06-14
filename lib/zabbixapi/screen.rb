@@ -120,20 +120,20 @@ module Zabbix
           'screenids' => [ screen_id ],
           'screenitems' => [
             {
-               'resourcetype' => 'graph',
-               'resourceid' => graph_id,
-               'width' => '800',
-               'height' => '200',
-               'x' => x,
-               'y' => y,
-               'valign' => 'Middle',
-               'halign' => 'Centre',
-               'colspan' => '0',
-               'rowspan' => '0',
-               'elements' => '0',
-               'dynamic' => '0',
-               'url' => '0',
-               'style' => '0'
+              'resourcetype' => 'graph',
+              'resourceid' => graph_id,
+              'width' => '800',
+              'height' => '200',
+              'x' => x,
+              'y' => y,
+              'valign' => 'Middle',
+              'halign' => 'Centre',
+              'colspan' => '0',
+              'rowspan' => '0',
+              'elements' => '0',
+              'dynamic' => '0',
+              'url' => '0',
+              'style' => '0'
             }
           ]
         }

@@ -5,7 +5,7 @@ module Zabbix
 
       template_default = {
         'host' => nil,
-        'groups' => [],
+        'groups' => []
       }
 
       template_options['groups'].map! { |group_id| {'groupid' => group_id} }

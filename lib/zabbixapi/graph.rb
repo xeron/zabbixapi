@@ -2,6 +2,7 @@ module Zabbix
   class ZabbixApi
 
     def add_graph(graph)
+
       message = {
         'method' => 'graph.create',
         'params' => graph
@@ -31,6 +32,8 @@ module Zabbix
       else
         result = nil
       end
+
+      return result
     end
 
     def get_graphs(host_id)

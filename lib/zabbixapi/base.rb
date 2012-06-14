@@ -125,7 +125,7 @@ module Zabbix
         if a.has_key?(key)
           c[key] = value
         end
-     end
+      end
 
       return a.merge(c)
     end
