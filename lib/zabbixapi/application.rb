@@ -13,10 +13,10 @@ module Zabbix
         'params' => application
       }
 
-      responce = send_request(message)
+      response = send_request(message)
 
-      unless responce.empty?
-        result = responce['applicationids'][0].to_i
+      unless response.empty?
+        result = response['applicationids'][0].to_i
       else
         result = nil
       end
@@ -36,10 +36,10 @@ module Zabbix
         }
       }
 
-      responce = send_request(message)
+      response = send_request(message)
 
-      unless responce.empty?
-        result = responce[0]['applicationid']
+      unless response.empty?
+        result = response[0]['applicationid']
       else
         result = nil
       end

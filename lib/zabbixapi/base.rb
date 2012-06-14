@@ -45,7 +45,7 @@ module Zabbix
       uri = URI.parse(@api_url)
       http = Net::HTTP.new(uri.host, uri.port)
 
-      if ( uri.scheme == "https" ) then
+      if uri.scheme == "https"
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
@@ -82,7 +82,7 @@ module Zabbix
         e_message = "Code: [" + error_code.to_s + "]. Message: [" + error_message +\
               "]. Data: [" + error_data + "]."
 
-        case error_code.to_s 
+        case error_code.to_s
         when '-32602'
           raise Zabbix::AlreadyExist.new(e_message)
         else
@@ -96,11 +96,11 @@ module Zabbix
     end
 
     def send_request(message)
-      message['auth'] = auth()
+      message['auth'] = auth
       do_request(message)
     end
 
-    def auth()
+    def auth
 
       auth_message = {
         'auth' =>  nil,
@@ -117,17 +117,18 @@ module Zabbix
       return auth_id
     end
 
-# Utils. 
+    # Utils.
     def merge_opt(a, b)
       c = {}
 
       b.each_pair do |key, value|
-        if a.has_key?(key) then
+        if a.has_key?(key)
           c[key] = value
         end
      end
 
       return a.merge(c)
     end
+
   end
 end

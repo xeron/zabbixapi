@@ -1,6 +1,6 @@
 module Zabbix
-
   class ZabbixApi
+
     def get_group_id(pattern)
 
       message = {
@@ -14,7 +14,7 @@ module Zabbix
 
       response = send_request(message)
 
-      if not ( response.empty? ) then
+      unless response.empty?
         result = response[0]['groupid']
       else
         result = nil
@@ -25,9 +25,9 @@ module Zabbix
 
     def group_exist?(pattern)
 
-      group_id = get_groups_id(pattern)
+      group_id = get_group_id(pattern)
 
-      if ( group_id ) then
+      if group_id
         return true
       else
         return false
@@ -45,7 +45,7 @@ module Zabbix
 
       response = send_request(message)
 
-      if ( response ) then
+      unless response.empty?
         result = response['groupids']
       else
         result = nil
@@ -55,7 +55,7 @@ module Zabbix
     end
 
     def add_host_to_group(host_id, group_id)
-      
+
       message = {
         'method' => 'hostgroup.massAdd',
         'params' => {
@@ -66,13 +66,14 @@ module Zabbix
 
       response = send_request(message)
 
-      if not ( response.empty? ) then
+      unless response.empty?
         result = true
       else
         result = false
       end
-      
+
       return result
     end
+
   end
 end

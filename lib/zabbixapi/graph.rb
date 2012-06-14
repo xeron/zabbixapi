@@ -26,7 +26,7 @@ module Zabbix
 
       response = send_request(message)
 
-      unless ( response.empty? ) then
+      unless response.empty?
         result = response[0]['graphid']
       else
         result = nil
@@ -47,10 +47,10 @@ module Zabbix
 
       response = send_request(message)
 
-      unless ( response.empty? ) then
+      unless response.empty?
         result = {}
 
-        response.each() do |graph|
+        response.each do |graph|
           graph_id = graph['graphid']
           graph_name = graph['name']
 

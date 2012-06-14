@@ -1,6 +1,6 @@
 module Zabbix
-
   class ZabbixApi
+
     def add_host(host_options)
 
       host_default = {
@@ -32,7 +32,7 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response['hostids'][0].to_i
       else
         result = nil
@@ -42,7 +42,7 @@ module Zabbix
     end
 
     def get_host_id(hostname)
-  
+
       message = {
         'method' => 'host.get',
         'params' => {
@@ -54,7 +54,7 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response[0]['hostid'].to_i
       else
         result = nil
@@ -62,5 +62,6 @@ module Zabbix
 
       return result
     end
+
   end
 end

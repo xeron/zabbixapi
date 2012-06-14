@@ -1,6 +1,6 @@
 module Zabbix
-
   class ZabbixApi
+
     def add_trigger(trigger)
 
       message = {
@@ -10,14 +10,13 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response['triggerids'][0]
       else
         result = nil
       end
 
       return result
-
     end
 
     def get_trigger_id(host_id, trigger_name)
@@ -34,12 +33,12 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response[0]['triggerid']
       else
         result = nil
       end
-    
+
       return result
     end
 
@@ -57,8 +56,9 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = {}
+
         response.each do |trigger|
           trigger_id = trigger['triggerid']
           description = trigger['description']
@@ -83,7 +83,7 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response['triggerids'][0]
       else
         result = nil
@@ -91,5 +91,6 @@ module Zabbix
 
       return result
     end
+
   end
 end

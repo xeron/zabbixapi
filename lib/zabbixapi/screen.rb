@@ -1,6 +1,6 @@
 module Zabbix
-
   class ZabbixApi
+
     def get_screen_id(screen_name)
 
       message = {
@@ -14,7 +14,7 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response[0]['screenid']
       else
         result = nil
@@ -35,11 +35,13 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response[0][param_name]
       else
-        result nil
+        result = nil
       end
+
+      return result
     end
 
     def get_screen_graph_ids(screen_id)
@@ -55,11 +57,12 @@ module Zabbix
 
       response = send_request(message)
 
-      unless ( response.empty?) then
+      unless response.empty?
         result = []
         screenitems = response[0]['screenitems']
-        screenitems.each() do |item|
-          if ( item['resourcetype'].to_i == 0 ) then
+
+        screenitems.each do |item|
+          if item['resourcetype'].to_i == 0
             result << item['resourceid']
           end
         end
@@ -82,7 +85,7 @@ module Zabbix
 
       response = send_request(message)
 
-      if not ( response.empty? ) then
+      unless response.empty?
         result = true
       else
         result = false
@@ -102,7 +105,7 @@ module Zabbix
 
       response = send_request(message)
 
-      if ( response ) then
+      unless response.empty?
         return response
       else
         return nil
@@ -138,7 +141,11 @@ module Zabbix
 
       response = send_request(message)
 
-      return response
+      unless response.empty?
+        return response
+      else
+        return nil
+      end
     end
 
     def add_screen(screen_name, hsize, vsize)
@@ -154,7 +161,7 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response['screenids'][0]
       else
         result = nil
@@ -162,5 +169,6 @@ module Zabbix
 
       return result
     end
+
   end
 end

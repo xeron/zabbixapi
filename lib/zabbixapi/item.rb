@@ -1,7 +1,8 @@
 module Zabbix
   class ZabbixApi
+
     def add_item(item)
-      
+
       # Default item options
       # See: http://www.zabbix.com/documentation/1.8/api/item
 
@@ -62,7 +63,7 @@ module Zabbix
 
 
       item_options.merge!(item)
-    
+
       message = {
         'method' => 'item.create',
         'params' => [ item_options ]
@@ -70,14 +71,13 @@ module Zabbix
 
       response = send_request(message)
 
-      unless response.empty? then
+      unless response.empty?
         result = response['itemids'][0]
       else
         result = nil
       end
 
       return result
-
     end
 
     def get_item_id(host_id, item_name)
@@ -92,7 +92,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      
+
       unless response.empty?
         result = response[0]['itemid']
       else
@@ -100,18 +100,17 @@ module Zabbix
       end
 
       return result
-
     end
 
     def item_exist?(host_id, item_name)
-      item_id = get_item_id(host_id, item_name)
-      if item_id
-        result = true
-      else
-        result = false
-      end
 
-      return result
+      item_id = get_item_id(host_id, item_name)
+
+      if item_id
+        return true
+      else
+        return false
+      end
     end
 
     def update_item(item_id, options)
@@ -137,18 +136,18 @@ module Zabbix
     # Don't work with api < 1.8.4
     def delete_item(item_ids)
 
-      if item_ids.kind_of? Array
+      if item_ids.is_a? Array
         message = {
           'method' => 'item.delete',
           'params' => item_ids
         }
-      elsif item_ids.kind_of? Fixnum or item_ids.kind_of? String
+      elsif item_ids.is_a? Fixnum or item_ids.is_a? String
         message = {
           'method' => 'item.delete',
           'params' => [ item_ids ]
         }
       else
-        raise Zabbix::ArgumentError.new("Zabbix::ZabbixApi.delete_item() argument error. item_ids => #{item_ids.inspect}")
+        raise Zabbix::ArgumentError.new("Zabbix::ZabbixApi.delete_item argument error. item_ids => #{item_ids.inspect}")
       end
 
       response = send_request(message)
@@ -165,5 +164,6 @@ module Zabbix
 
       return result
     end
+
   end
 end
