@@ -9,17 +9,55 @@ module Zabbix
   class ZabbixError < RuntimeError
   end
 
+  class SocketError < RuntimeError
+  end
+
+  class AuthError < RuntimeError
+  end
+
+  class ResponseCodeError < RuntimeError
+  end
+
+  class ResponseError < RuntimeError
+  end
+
   class ZabbixApi
+
+    attr_accessor :debug
 
     def initialize (api_url, api_user, api_password)
       @api_url = api_url
       @api_user = api_user
       @api_password = api_password
       @auth_id = nil
+      @debug = false # Disable debug by default
     end
 
-    def do_request(message)
+    def auth
+      unless @auth_id
+        auth_message = {
+          'auth' => nil,
+          'method' => 'user.authenticate',
+          'params' => {
+            'user' => @api_user,
+            'password' => @api_password,
+            '0' => '0'
+          }
+        }
 
+        begin
+          @auth_id = do_request(auth_message)
+        rescue ZabbixError => e
+          raise Zabbix::AuthError.new(e.message)
+        end
+      end
+
+      return @auth_id
+    end
+
+    private
+
+    def do_request(message)
       id = rand 100_000
 
       message['id'] = id
@@ -40,13 +78,23 @@ module Zabbix
       request.body=(message_json)
 
       begin
+        puts "[ZBXAPI] : INFO : Do request. Body => #{request.body}" if @debug
         response = http.request(request)
       rescue SocketError => e
-        raise ZabbixError.new("Could not connect to #{@api_url}: #{e.message}")
+        raise Zabbix::SocketError.new("Could not connect to [" + @api_url + "]: #{e.message}.")
       end
 
       if response.code != "200"
-        raise ZabbixError.new("Response code is #{response.code}")
+        raise Zabbix::ResponseCodeError.new("Response code from [" + @api_url + "] is #{response.code}.")
+      end
+
+      if @debug
+        puts "[ZBXAPI] : INFO : Response start"
+        response.each_header do |key,value|
+          puts "#{key}: #{value}"
+        end
+        puts response
+        puts "[ZBXAPI] : INFO : Response end"
       end
 
       response_body_hash = JSON.parse(response.body)
@@ -60,9 +108,9 @@ module Zabbix
         error_message = "Code: #{e_code.to_s}. Data: #{e_data}. Message: #{e_message}."
 
         if e_code == -32602
-          raise ZabbixError.new("Object already exists. #{error_message}")
+          raise Zabbix::ZabbixError.new("Invalid params. #{error_message}.")
         else
-          raise ZabbixError.new(error_message)
+          raise Zabbix::ResponseError.new("Unknown error. #{error_message}.")
         end
       end
 
@@ -74,25 +122,6 @@ module Zabbix
       do_request(message)
     end
 
-    def auth
-      unless @auth_id
-        auth_message = {
-          'auth' =>  nil,
-          'method' =>  'user.authenticate',
-          'params' =>  {
-            'user' => @api_user,
-            'password' => @api_password,
-            '0' => '0'
-          }
-        }
-
-        @auth_id = do_request(auth_message)
-      end
-
-      return @auth_id
-    end
-
-    # Utils.
     def merge_opt(a, b)
       c = {}
 

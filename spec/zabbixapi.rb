@@ -25,7 +25,7 @@ describe Zabbix::ZabbixApi do
 
       api_login = "wrong_user"
       zbx = Zabbix::ZabbixApi.new(@api_url, api_login, @api_password)
-      lambda {zbx.auth}.should raise_error(Zabbix::ZabbixError)
+      lambda {zbx.auth}.should raise_error(Zabbix::AuthError)
     end
   end
 
