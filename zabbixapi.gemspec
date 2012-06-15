@@ -13,8 +13,11 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.extra_rdoc_files = 'README.rdoc'
 
-  s.add_dependency "json"
+  s.add_dependency 'json'
+
+  s.add_development_dependency 'webmock'
+  s.add_development_dependency 'rspec'
 
   s.require_path = 'lib'
-  s.files = %w(LICENSE README.rdoc) + Dir.glob("{lib,spec,examples}/**/*")
+  s.files = %w(LICENSE README.rdoc) + Dir.glob('{lib,spec,examples}/**/*')
 end
