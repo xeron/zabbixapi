@@ -15,6 +15,7 @@ module Zabbix
       @api_url = api_url
       @api_user = api_user
       @api_password = api_password
+      @auth_id = nil
     end
 
     def do_request(message)
@@ -74,20 +75,21 @@ module Zabbix
     end
 
     def auth
-
-      auth_message = {
-        'auth' =>  nil,
-        'method' =>  'user.authenticate',
-        'params' =>  {
-          'user' => @api_user,
-          'password' => @api_password,
-          '0' => '0'
+      unless @auth_id
+        auth_message = {
+          'auth' =>  nil,
+          'method' =>  'user.authenticate',
+          'params' =>  {
+            'user' => @api_user,
+            'password' => @api_password,
+            '0' => '0'
+          }
         }
-      }
 
-      auth_id = do_request(auth_message)
+        @auth_id = do_request(auth_message)
+      end
 
-      return auth_id
+      return @auth_id
     end
 
     # Utils.
