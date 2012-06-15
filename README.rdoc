@@ -37,5 +37,5 @@ You can:
 
 == Zabbix documentation
 
-* Zabbix Project Homepage -> http://zabbix.com/
+* Zabbix Project Homepage -> http://www.zabbix.com
 * Zabbix Api docs -> http://www.zabbix.com/documentation/1.8/api
