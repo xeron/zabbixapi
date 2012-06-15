@@ -1,20 +1,20 @@
-# -*- encoding: utf-8 -*-
+$:.unshift(File.dirname(__FILE__) + '/lib')
+require 'zabbixapi/version'
 
-require 'rake'
+Gem::Specification.new do |s|
+  s.version = Zabbix::VERSION
+  s.name = 'zabbixapi'
+  s.summary = 'Ruby module for work with zabbix api.'
+  s.email = ['verm666@gmail.com', 'xeron.oskom@gmail.com']
+  s.authors = ['Eduard Snesarev', 'Ivan Larionov']
+  s.homepage = 'https://github.com/xeron/zabbixapi'
+  s.description = 'Ruby module for work with zabbix api.'
 
-Gem::Specification.new do |spec|
+  s.has_rdoc = true
+  s.extra_rdoc_files = 'README.rdoc'
 
-  spec.version = '0.2.0'
-  spec.name = 'zabbixapi'
-  spec.summary = 'Ruby module for work with zabbix api.'
+  s.add_dependency "json"
 
-  spec.email = 'verm666@gmail.com'
-  spec.author = 'Eduard Snesarev'
-  spec.homepage = 'http://github.com/verm666/RubyZabbixApi'
-  spec.description = 'Ruby module for work with zabbix api. '
-
-  spec.has_rdoc = true
-  spec.extra_rdoc_files  = 'README.rdoc'
-
-  spec.files = FileList["lib/*.rb", "lib/zabbixapi/*.rb", "bin/*", "spec/*", 'zabbixapi.gemspec', 'README.rdoc', "examples/*"].to_a
+  s.require_path = 'lib'
+  s.files = %w(LICENSE README.rdoc) + Dir.glob("{lib,spec,examples}/**/*")
 end
