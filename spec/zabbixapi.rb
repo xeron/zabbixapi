@@ -13,7 +13,7 @@ describe Zabbix::ZabbixApi do
     stub_request(:post, @api_url).with(:body => /"method":"user\.login"/).to_return(:body => auth_response)
   end
 
-  context 'auth' do
+  context 'user' do
     it 'should login with correct data' do
       zbx = Zabbix::ZabbixApi.new(@api_url, @api_login, @api_password)
       zbx.login.should_not be_nil
@@ -29,7 +29,7 @@ describe Zabbix::ZabbixApi do
     end
   end
 
-  context 'add item' do
+  context 'item' do
     item_options = {
       'description' => 'Description',
       'key_' => 'key[,avg1]',
