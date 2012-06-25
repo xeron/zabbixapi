@@ -1,38 +1,36 @@
 module Zabbix
   class ZabbixApi
 
-    def add_application(app_options)
-
-      app_options_default = {
-        'hostid' => nil,
-        'name' => nil
-      }
-      application = merge_opt(app_options_default, app_options)
+    # Add application to host by given host id and new application name.
+    # === Returns
+    # Integer:: New application id
+    def add_application(host_id, app_name)
 
       message = {
         'method' => 'application.create',
-        'params' => application
+        'params' => [ {'hostid' => host_id, 'name' => app_name} ]
       }
 
       response = send_request(message)
 
       unless response.empty?
-        result = response['applicationids'][0].to_i
+        return response['applicationids'][0].to_i
       else
-        result = nil
+        return nil
       end
-
-      return result
     end
 
-    def get_app_id(host_id, app_name)
+    # Get id of application by given host id and application name.
+    # === Returns
+    # Integer:: Application id
+    def get_application_id(host_id, app_name)
 
       message = {
         'method' => 'application.get',
         'params' => {
           'filter' => {
-            'name' => app_name,
-            'hostid' => host_id
+            'hostid' => host_id,
+            'name' => app_name
           }
         }
       }
@@ -40,12 +38,10 @@ module Zabbix
       response = send_request(message)
 
       unless response.empty?
-        result = response[0]['applicationid']
+        return response[0]['applicationid'].to_i
       else
-        result = nil
+        return nil
       end
-
-      return result
     end
 
   end

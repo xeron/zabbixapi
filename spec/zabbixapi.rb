@@ -10,22 +10,22 @@ describe Zabbix::ZabbixApi do
 
     # Auth used in every test
     auth_response = '{"jsonrpc":"2.0","result":"a82039d56baba1f92311aa917af9939b","id":83254}'
-    stub_request(:post, @api_url).with(:body => /"method":"user\.authenticate"/).to_return(:body => auth_response)
+    stub_request(:post, @api_url).with(:body => /"method":"user\.login"/).to_return(:body => auth_response)
   end
 
   context 'auth' do
     it 'should login with correct data' do
       zbx = Zabbix::ZabbixApi.new(@api_url, @api_login, @api_password)
-      zbx.auth.should_not be_nil
+      zbx.login.should_not be_nil
     end
 
     it 'should not login with wrong data' do
       auth_response = '{"jsonrpc":"2.0","error":{"code":-32602,"message":"Invalid params.","data":"Login name or password is incorrect"},"id":11219}'
-      stub_request(:post, @api_url).with(:body => /"method":"user\.authenticate".*"wrong_user"/).to_return(:body => auth_response)
+      stub_request(:post, @api_url).with(:body => /"method":"user\.login".*"wrong_user"/).to_return(:body => auth_response)
 
-      api_login = "wrong_user"
+      api_login = 'wrong_user'
       zbx = Zabbix::ZabbixApi.new(@api_url, api_login, @api_password)
-      lambda {zbx.auth}.should raise_error(Zabbix::AuthError)
+      lambda {zbx.login}.should raise_error(Zabbix::AuthError)
     end
   end
 

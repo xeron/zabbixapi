@@ -1,5 +1,6 @@
 require 'zabbixapi/base'
 
+require 'zabbixapi/user'
 require 'zabbixapi/host'
 require 'zabbixapi/item'
 require 'zabbixapi/graph'

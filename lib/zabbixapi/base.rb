@@ -1,5 +1,3 @@
-#!/usr/bin/ruby
-
 require 'json'
 require 'net/http'
 require 'net/https'
@@ -33,28 +31,6 @@ module Zabbix
       @debug = false # Disable debug by default
     end
 
-    def auth
-      unless @auth_id
-        auth_message = {
-          'auth' => nil,
-          'method' => 'user.authenticate',
-          'params' => {
-            'user' => @api_user,
-            'password' => @api_password,
-            '0' => '0'
-          }
-        }
-
-        begin
-          @auth_id = do_request(auth_message)
-        rescue ZabbixError => e
-          raise Zabbix::AuthError.new(e.message)
-        end
-      end
-
-      return @auth_id
-    end
-
     private
 
     def do_request(message)
@@ -68,7 +44,7 @@ module Zabbix
       uri = URI.parse(@api_url)
       http = Net::HTTP.new(uri.host, uri.port)
 
-      if uri.scheme == "https"
+      if uri.scheme == 'https'
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
@@ -81,20 +57,20 @@ module Zabbix
         puts "[ZBXAPI] : INFO : Do request. Body => #{request.body}" if @debug
         response = http.request(request)
       rescue SocketError => e
-        raise Zabbix::SocketError.new("Could not connect to [" + @api_url + "]: #{e.message}.")
+        raise Zabbix::SocketError.new("Could not connect to [#{@api_url}]: #{e.message}.")
       end
 
-      if response.code != "200"
-        raise Zabbix::ResponseCodeError.new("Response code from [" + @api_url + "] is #{response.code}.")
+      if response.code != '200'
+        raise Zabbix::ResponseCodeError.new("Response code from [#{@api_url}] is #{response.code}.")
       end
 
       if @debug
-        puts "[ZBXAPI] : INFO : Response start"
+        puts '[ZBXAPI] : INFO : Response start'
         response.each_header do |key,value|
           puts "#{key}: #{value}"
         end
         puts response
-        puts "[ZBXAPI] : INFO : Response end"
+        puts '[ZBXAPI] : INFO : Response end'
       end
 
       response_body_hash = JSON.parse(response.body)
@@ -118,7 +94,7 @@ module Zabbix
     end
 
     def send_request(message)
-      message['auth'] = auth
+      message['auth'] = login
       do_request(message)
     end
 
