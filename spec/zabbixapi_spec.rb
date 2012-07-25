@@ -1,12 +1,14 @@
 $:.unshift(File.dirname(__FILE__))
 require 'spec_helper'
 
-HOSTID = 10050
-APPID = 100500
-APPNAME = "SNMP Items"
 API_URL = "http://zabbix.local/api_jsonrpc.php"
 API_LOGIN = "admin"
 API_PASSWORD = "zabbix"
+
+AUTHID = "a82039d56baba1f92311aa917af9939b"
+HOSTID = 10050
+APPID = 100500
+APPNAME = "SNMP Items"
 
 describe Zabbix::ZabbixApi do
 
@@ -14,13 +16,13 @@ describe Zabbix::ZabbixApi do
     @zbx = Zabbix::ZabbixApi.new(API_URL, API_LOGIN, API_PASSWORD)
 
     # Auth used in every test
-    auth_response = '{"jsonrpc":"2.0","result":"a82039d56baba1f92311aa917af9939b","id":2}'
+    auth_response = '{"jsonrpc":"2.0","result":"' + AUTHID + '","id":2}'
     stub_request(:post, API_URL).with(:body => /"method":"user\.login"/).to_return(:body => auth_response)
   end
 
   context "user" do
     it "should login with correct data" do
-      @zbx.login.should eq("a82039d56baba1f92311aa917af9939b")
+      @zbx.login.should eq(AUTHID)
     end
 
     it "should not login with wrong data" do
