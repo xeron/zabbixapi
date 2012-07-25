@@ -20,6 +20,7 @@ describe Zabbix::ZabbixApi do
     stub_request(:post, API_URL).with(:body => /"method":"user\.login"/).to_return(:body => auth_response)
   end
 
+
   context "user" do
     it "should login with correct data" do
       @zbx.login.should eq(AUTHID)
@@ -34,6 +35,7 @@ describe Zabbix::ZabbixApi do
       lambda {zbx.login}.should raise_error(Zabbix::AuthError)
     end
   end
+
 
   context "application" do
     it "should add application" do
@@ -71,6 +73,7 @@ describe Zabbix::ZabbixApi do
       @zbx.get_application_id(HOSTID, APPNAME).should eq(APPID)
     end
   end
+
 
   context "item" do
     item_options = {

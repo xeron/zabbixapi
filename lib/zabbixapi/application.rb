@@ -39,6 +39,9 @@ module Zabbix
       end
     end
 
+    # Check application exists by given host id and application name.
+    # === Returns
+    # Boolean:: true if application exists
     def app_exists?(host_id, app_name)
 
       message = {
