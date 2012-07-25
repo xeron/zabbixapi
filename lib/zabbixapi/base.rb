@@ -85,6 +85,8 @@ module Zabbix
 
         if e_code == -32602
           raise Zabbix::ZabbixError.new("Invalid params. #{error_message}.")
+        elsif e_code == -32500
+          raise Zabbix::ZabbixError.new("Does not exist. #{error_message}.")
         else
           raise Zabbix::ResponseError.new("Unknown error. #{error_message}.")
         end

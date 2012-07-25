@@ -20,6 +20,37 @@ module Zabbix
       end
     end
 
+    # Delete application and all related information by given application id.
+    # === Returns
+    # Integer:: Deleted application id
+    def del_application(app_id)
+
+      message = {
+        'method' => 'application.delete',
+        'params' => [ app_id ]
+      }
+
+      response = send_request(message)
+
+      unless response.empty?
+        return response['applicationids'][0].to_i
+      else
+        return nil
+      end
+    end
+
+    def app_exists?(host_id, app_name)
+
+      message = {
+        'method' => 'application.exists',
+        'params' => [ {'hostid' => host_id, 'name' => app_name} ]
+      }
+
+      response = send_request(message)
+
+      return response
+    end
+
     # Get id of application by given host id and application name.
     # === Returns
     # Integer:: Application id
