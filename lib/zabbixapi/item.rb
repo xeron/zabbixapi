@@ -72,12 +72,10 @@ module Zabbix
       response = send_request(message)
 
       unless response.empty?
-        result = response['itemids'][0]
+        return response['itemids'][0].to_i
       else
-        result = nil
+        return nil
       end
-
-      return result
     end
 
     def get_item_id(host_id, item_name)
