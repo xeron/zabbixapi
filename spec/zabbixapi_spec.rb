@@ -56,10 +56,10 @@ describe Zabbix::ZabbixApi do
     end
 
     it "should check application doesn't exist" do
-      exists_application_response = '{"jsonrpc":"2.0","result":true,"id":2}'
+      exists_application_response = '{"jsonrpc":"2.0","result":false,"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"application\.exists"/).to_return(:body => exists_application_response)
 
-      @zbx.app_exists?(HOSTID, APPNAME).should eq(true)
+      @zbx.app_exists?(HOSTID, APPNAME).should eq(false)
     end
 
     it "should get application id" do
