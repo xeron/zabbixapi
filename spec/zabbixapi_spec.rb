@@ -17,7 +17,8 @@ describe Zabbix::ZabbixApi do
 
     # Auth used in every test
     auth_response = '{"jsonrpc":"2.0","result":"' + AUTHID + '","id":2}'
-    stub_request(:post, API_URL).with(:body => /"method":"user\.login"/).to_return(:body => auth_response)
+    stub_request(:post, API_URL).with(:body => /"method":"user\.login".*"user":"admin"/).to_return(:body => auth_response)
+    stub_request(:post, API_URL).with(:body => /"user":"admin".*"method":"user\.login"/).to_return(:body => auth_response)
   end
 
 
@@ -28,7 +29,8 @@ describe Zabbix::ZabbixApi do
 
     it "should not login with wrong data" do
       auth_response = '{"jsonrpc":"2.0","error":{"code":-32602,"message":"Invalid params.","data":"Login name or password is incorrect"},"id":2}'
-      stub_request(:post, API_URL).with(:body => /"method":"user\.login".*"wrong_user"/).to_return(:body => auth_response)
+      stub_request(:post, API_URL).with(:body => /"method":"user\.login".*"user":"wrong_user"/).to_return(:body => auth_response)
+      stub_request(:post, API_URL).with(:body => /"user":"wrong_user".*"method":"user\.login"/).to_return(:body => auth_response)
 
       api_login = "wrong_user"
       zbx = Zabbix::ZabbixApi.new(API_URL, api_login, API_PASSWORD)
