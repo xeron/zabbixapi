@@ -1,7 +1,7 @@
 module Zabbix
   class ZabbixApi
 
-    # Add application to host by given host id and new application name.
+    # Create application and link to host by given host id and new application name.
     # === Returns
     # Integer:: New application id
     def add_app(host_id, app_name)
@@ -41,11 +41,10 @@ module Zabbix
 
     # Check application exists by given host id and application name.
     # WARNING:
-    # Always returns true due to zabbix bug.
-    # Please, use get_app_id for test application exists.
+    # Always returns true due to zabbix bug. See next method for app_exists? emplementation.
     # === Returns
     # Boolean:: true if application exists
-    def app_exists?(host_id, app_name)
+    def buggy_method_app_exists?(host_id, app_name)
 
       message = {
         'method' => 'application.exists',
@@ -55,6 +54,19 @@ module Zabbix
       response = send_request(message)
 
       return response
+    end
+
+    # Check application exists by given host id and application name.
+    # === Returns
+    # Boolean:: true if application exists
+    def app_exists?(host_id, app_name)
+      app_id = get_app_id(host_id, app_name)
+
+      if app_id
+        return true
+      else
+        return false
+      end
     end
 
     # Get id of application by given host id and application name.
