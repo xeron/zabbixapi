@@ -9,6 +9,8 @@ AUTHID = "a82039d56baba1f92311aa917af9939b"
 HOSTID = 10050
 APPID = 100500
 APPNAME = "SNMP Items"
+GROUPNAME = "Linux"
+GROUPID = 105
 
 describe Zabbix::ZabbixApi do
 
@@ -40,25 +42,56 @@ describe Zabbix::ZabbixApi do
 
 
   context "application" do
-    it "should add application" do
-      add_application_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID.to_s + '"]},"id":2}'
-      stub_request(:post, API_URL).with(:body => /"method":"application\.create"/).to_return(:body => add_application_response)
+    it "should create application" do
+      add_app_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID.to_s + '"]},"id":2}'
+      stub_request(:post, API_URL).with(:body => /"method":"application\.create"/).to_return(:body => add_app_response)
 
       @zbx.add_app(HOSTID, APPNAME).should eq(APPID)
     end
 
     it "should delete application" do
-      del_application_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID.to_s + '"]},"id":2}'
-      stub_request(:post, API_URL).with(:body => /"method":"application\.delete"/).to_return(:body => del_application_response)
+      del_app_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID.to_s + '"]},"id":2}'
+      stub_request(:post, API_URL).with(:body => /"method":"application\.delete"/).to_return(:body => del_app_response)
 
       @zbx.del_app(APPID).should eq(APPID)
     end
 
     it "should get application id" do
-      get_application_id_response = '{"jsonrpc":"2.0","result":[{"hosts":[{"hostid":"' + HOSTID.to_s + '"}],"applicationid":"' + APPID.to_s + '","name":"' + APPNAME + '","templateid":"100100000000005","host":"192.168.3.1"}],"id":2}'
-      stub_request(:post, API_URL).with(:body => /"method":"application\.get"/).to_return(:body => get_application_id_response)
+      get_app_id_response = '{"jsonrpc":"2.0","result":[{"applicationid":"' + APPID.to_s + '"}],"id":2}'
+      stub_request(:post, API_URL).with(:body => /"method":"application\.get"/).to_return(:body => get_app_id_response)
 
       @zbx.get_app_id(HOSTID, APPNAME).should eq(APPID)
+    end
+  end
+
+
+  context "group" do
+    it "should create group" do
+      add_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID.to_s + '"]},"id":2}'
+      stub_request(:post, API_URL).with(:body => /"method":"hostgroup\.create"/).to_return(:body => add_group_response)
+
+      @zbx.add_group(GROUPNAME).should eq(GROUPID)
+    end
+
+    it "should delete group" do
+      del_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID.to_s + '"]},"id":2}'
+      stub_request(:post, API_URL).with(:body => /"method":"hostgroup\.delete"/).to_return(:body => del_group_response)
+
+      @zbx.del_group(GROUPID).should eq(GROUPID)
+    end
+
+    it "should get group id" do
+      get_group_id_response = '{"jsonrpc":"2.0","result":[{"groupid":"' + GROUPID.to_s + '"}],"id":2}'
+      stub_request(:post, API_URL).with(:body => /"method":"hostgroup\.get"/).to_return(:body => get_group_id_response)
+
+      @zbx.get_group_id(GROUPNAME).should eq(GROUPID)
+    end
+
+    it "should add host to group" do
+      add_host_to_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID.to_s + '"]},"id":2}'
+      stub_request(:post, API_URL).with(:body => /"method":"hostgroup\.massAdd"/).to_return(:body => add_host_to_group_response)
+
+      @zbx.add_host_to_group(HOSTID, GROUPID).should eq(GROUPID)
     end
   end
 
