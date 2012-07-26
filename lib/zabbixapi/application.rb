@@ -40,23 +40,6 @@ module Zabbix
     end
 
     # Check application exists by given host id and application name.
-    # WARNING:
-    # Always returns true due to zabbix bug. See next method for app_exists? emplementation.
-    # === Returns
-    # Boolean:: true if application exists
-    def buggy_method_app_exists?(host_id, app_name)
-
-      message = {
-        'method' => 'application.exists',
-        'params' => [ {'hostid' => host_id, 'name' => app_name} ]
-      }
-
-      response = send_request(message)
-
-      return response
-    end
-
-    # Check application exists by given host id and application name.
     # === Returns
     # Boolean:: true if application exists
     def app_exists?(host_id, app_name)

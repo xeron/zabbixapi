@@ -54,20 +54,6 @@ describe Zabbix::ZabbixApi do
       @zbx.del_app(APPID).should eq(APPID)
     end
 
-    it "should check application exists" do
-      exists_application_response = '{"jsonrpc":"2.0","result":true,"id":2}'
-      stub_request(:post, API_URL).with(:body => /"method":"application\.exists"/).to_return(:body => exists_application_response)
-
-      @zbx.buggy_method_app_exists?(HOSTID, APPNAME).should eq(true)
-    end
-
-    it "should check application doesn't exist" do
-      exists_application_response = '{"jsonrpc":"2.0","result":false,"id":2}'
-      stub_request(:post, API_URL).with(:body => /"method":"application\.exists"/).to_return(:body => exists_application_response)
-
-      @zbx.buggy_method_app_exists?(HOSTID, APPNAME).should eq(false)
-    end
-
     it "should get application id" do
       get_application_id_response = '{"jsonrpc":"2.0","result":[{"hosts":[{"hostid":"' + HOSTID.to_s + '"}],"applicationid":"' + APPID.to_s + '","name":"' + APPNAME + '","templateid":"100100000000005","host":"192.168.3.1"}],"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"application\.get"/).to_return(:body => get_application_id_response)
