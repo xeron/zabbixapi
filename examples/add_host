@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'zabbixapi'
+
+zbx = Zabbix::ZabbixApi.new("http://example-zabbix.com/api_jsonrpc.php","login","secret")
+
+group_name = "group to add"
+
+# Check if group exist
+if ! zbx.get_group_id( group_name )
+  # Create it if not exist
+  zbx.add_group( group_name )
+end
+group_id = zbx.get_group_id( group_name ).to_i
+host_options = {
+  'host' => "myhostname",
+  # Define an interface for a zabbix agent (type "1")
+  'interfaces' => [ { "type" => 1, "main" => 1, "useip" => 0, "ip" => "", "dns" => "myhostname.example.com", "port" => 10050 } ],
+  'groups' => [ group ]
+}
+zbx.add_host( host_options )
+
