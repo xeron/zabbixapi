@@ -23,7 +23,7 @@ module Zabbix
 
     attr_accessor :debug
 
-    def initialize (api_url, api_user, api_password)
+    def initialize(api_url, api_user, api_password)
       @api_url = api_url
       @api_user = api_user
       @api_password = api_password

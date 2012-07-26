@@ -4,7 +4,7 @@ module Zabbix
     # Add application to host by given host id and new application name.
     # === Returns
     # Integer:: New application id
-    def add_application(host_id, app_name)
+    def add_app(host_id, app_name)
 
       message = {
         'method' => 'application.create',
@@ -23,7 +23,7 @@ module Zabbix
     # Delete application and all related information by given application id.
     # === Returns
     # Integer:: Deleted application id
-    def del_application(app_id)
+    def del_app(app_id)
 
       message = {
         'method' => 'application.delete',
@@ -40,6 +40,9 @@ module Zabbix
     end
 
     # Check application exists by given host id and application name.
+    # WARNING:
+    # Always returns true due to zabbix bug.
+    # Please, use get_app_id for test application exists.
     # === Returns
     # Boolean:: true if application exists
     def app_exists?(host_id, app_name)
@@ -57,7 +60,7 @@ module Zabbix
     # Get id of application by given host id and application name.
     # === Returns
     # Integer:: Application id
-    def get_application_id(host_id, app_name)
+    def get_app_id(host_id, app_name)
 
       message = {
         'method' => 'application.get',

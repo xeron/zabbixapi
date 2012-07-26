@@ -44,14 +44,14 @@ describe Zabbix::ZabbixApi do
       add_application_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID.to_s + '"]},"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"application\.create"/).to_return(:body => add_application_response)
 
-      @zbx.add_application(HOSTID, APPNAME).should eq(APPID)
+      @zbx.add_app(HOSTID, APPNAME).should eq(APPID)
     end
 
     it "should delete application" do
       del_application_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID.to_s + '"]},"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"application\.delete"/).to_return(:body => del_application_response)
 
-      @zbx.del_application(APPID).should eq(APPID)
+      @zbx.del_app(APPID).should eq(APPID)
     end
 
     it "should check application exists" do
@@ -72,7 +72,7 @@ describe Zabbix::ZabbixApi do
       get_application_id_response = '{"jsonrpc":"2.0","result":[{"hosts":[{"hostid":"' + HOSTID.to_s + '"}],"applicationid":"' + APPID.to_s + '","name":"' + APPNAME + '","templateid":"100100000000005","host":"192.168.3.1"}],"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"application\.get"/).to_return(:body => get_application_id_response)
 
-      @zbx.get_application_id(HOSTID, APPNAME).should eq(APPID)
+      @zbx.get_app_id(HOSTID, APPNAME).should eq(APPID)
     end
   end
 
