@@ -7,7 +7,7 @@ module Zabbix
   class ZabbixError < RuntimeError
   end
 
-  class SocketError < RuntimeError
+  class ConnectionError < RuntimeError
   end
 
   class AuthError < RuntimeError
@@ -56,8 +56,8 @@ module Zabbix
       begin
         puts "[ZBXAPI] : INFO : Do request. Body => #{request.body}" if @debug
         response = http.request(request)
-      rescue SocketError => e
-        raise Zabbix::SocketError.new("Could not connect to [#{@api_url}]: #{e.message}.")
+      rescue => e
+        raise Zabbix::ConnectionError.new("Could not connect to [#{@api_url}]: #{e.message}.")
       end
 
       if response.code != '200'
