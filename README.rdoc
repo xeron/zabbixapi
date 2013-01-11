@@ -1,6 +1,6 @@
 {<img src="https://secure.travis-ci.org/xeron/zabbixapi.png?branch=master" alt="Build Status" />}[http://travis-ci.org/xeron/zabbixapi]
 
-= Ruby Zabbix Api Module.
+= Ruby Zabbix Api Module
 
 Simple and lightweight ruby module for work with zabbix api version 1.8.x
 
@@ -12,7 +12,7 @@ You can:
 
     gem install zabbixapi
 
-== Get Start.
+== Get started
 
 * Get hostid from zabbix api:
 

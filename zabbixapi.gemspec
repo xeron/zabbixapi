@@ -5,10 +5,11 @@ Gem::Specification.new do |s|
   s.version = Zabbix::VERSION
   s.name = 'zabbixapi'
   s.summary = 'Ruby module for work with zabbix api.'
-  s.email = ['verm666@gmail.com', 'xeron.oskom@gmail.com']
-  s.authors = ['Eduard Snesarev', 'Ivan Larionov']
-  s.homepage = 'https://github.com/xeron/zabbixapi'
   s.description = 'Ruby module for work with zabbix api.'
+
+  s.authors = ['Eduard Snesarev', 'Ivan Larionov']
+  s.email = ['verm666@gmail.com', 'xeron.oskom@gmail.com']
+  s.homepage = 'https://github.com/xeron/zabbixapi'
 
   s.has_rdoc = true
   s.extra_rdoc_files = 'README.rdoc'
