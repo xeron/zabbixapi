@@ -1,7 +1,9 @@
 module Zabbix
   class ZabbixApi
 
-    def get_history(itemids)
+    TYPE_MAP = { String => '1', Integer => '3', Float => '0' }
+
+    def get_history(itemids, type = Integer)
 
       message = {
         'method'    => 'history.get',
@@ -10,7 +12,8 @@ module Zabbix
           'limit'     => 1,
           'sortorder' => 'DESC',
           'sortfield' => 'clock',
-          'output'    => 'extend'
+          'output'    => 'extend',
+          'history'   => TYPE_MAP[type]
         }
       }
 
