@@ -92,7 +92,7 @@ module Zabbix
       response = send_request(message)
 
       unless response.empty?
-        result = response[0]['itemid']
+        result = response[0]['itemid'].to_i
       else
         result = nil
       end
