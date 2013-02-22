@@ -3,13 +3,13 @@ module Zabbix
 
     TYPE_MAP = { String => '1', Integer => '3', Float => '0' }
 
-    def get_history(itemids, type = Integer)
+    def get_history(itemids, type = Integer, limit = 1)
 
       message = {
         'method'    => 'history.get',
         'params'    => {
           'itemids'   => itemids,
-          'limit'     => 1,
+          'limit'     => limit,
           'sortorder' => 'DESC',
           'sortfield' => 'clock',
           'output'    => 'extend',
