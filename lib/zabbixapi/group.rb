@@ -56,6 +56,7 @@ module Zabbix
         return false
       end
     end
+    alias group_exists? group_exist?
 
     # Get id of group by given group name.
     # === Returns

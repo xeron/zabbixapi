@@ -110,6 +110,7 @@ module Zabbix
         return false
       end
     end
+    alias item_exists? item_exist?
 
     def update_item(item_id, options)
 

@@ -42,7 +42,7 @@ module Zabbix
     # Check application exists by given host id and application name.
     # === Returns
     # Boolean:: true if application exists
-    def app_exists?(host_id, app_name)
+    def app_exist?(host_id, app_name)
       app_id = get_app_id(host_id, app_name)
 
       if app_id
@@ -51,6 +51,7 @@ module Zabbix
         return false
       end
     end
+    alias app_exists? app_exist?
 
     # Get id of application by given host id and application name.
     # === Returns
