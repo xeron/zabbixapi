@@ -51,7 +51,7 @@ module Zabbix
 
       request = Net::HTTP::Post.new(uri.request_uri)
       request.add_field('Content-Type', 'application/json-rpc')
-      request.body=(message_json)
+      request.body = message_json
 
       begin
         puts "[ZBXAPI] : INFO : Do request. Body => #{request.body}" if @debug
