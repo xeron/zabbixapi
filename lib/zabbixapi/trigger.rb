@@ -46,7 +46,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response[0]['triggerid'].to_i
+      response.empty? ? nil : response[0]['triggerid']
     end
 
     def get_triggers_by_host(host_id)
@@ -66,7 +66,7 @@ module Zabbix
         result = {}
 
         response.each do |trigger|
-          trigger_id = trigger['triggerid'].to_i
+          trigger_id = trigger['triggerid']
           description = trigger['description']
           result[trigger_id] = description
         end
@@ -107,7 +107,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response['triggerids'][0].to_i
+      response.empty? ? nil : response['triggerids'][0]
     end
 
     def trigger_add_dependencies(dependencies)
@@ -116,7 +116,7 @@ module Zabbix
         'params' => dependencies
       }
 
-      return send_request(message)
+      trigger_request(message)
     end
 
     def trigger_delete_dependencies(dependencies)
@@ -125,14 +125,14 @@ module Zabbix
         'params' => dependencies
       }
 
-      return send_request(message)
+      trigger_request(message)
     end
 
     private
 
     def trigger_request(message)
       response = send_request(message)
-      response.empty? ? nil : response['triggerids'].map { |id| id.to_i }
+      response.empty? ? nil : response['triggerids']
     end
 
   end

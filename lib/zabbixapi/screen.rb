@@ -124,7 +124,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response['screenids'][0].to_i
+      response.empty? ? nil : response['screenids'][0]
     end
 
   end

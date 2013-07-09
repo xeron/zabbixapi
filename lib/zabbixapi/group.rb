@@ -51,7 +51,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response[0]['groupid'].to_i
+      response.empty? ? nil : response[0]['groupid']
     end
 
     # Add host to group by given host id and group id.
@@ -73,7 +73,7 @@ module Zabbix
 
     def group_request(message)
       response = send_request(message)
-      response.empty? ? nil : response['groupids'][0].to_i
+      response.empty? ? nil : response['groupids'][0]
     end
 
   end

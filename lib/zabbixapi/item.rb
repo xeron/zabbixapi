@@ -84,7 +84,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response[0]['itemid'].to_i
+      response.empty? ? nil : response[0]['itemid']
     end
 
     def item_exist?(host_id, item_name)
@@ -111,7 +111,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response['itemids'].map { |id| id.to_i }
+      response.empty? ? nil : response['itemids']
     end
 
     def get_items_by_application(host_id, app_id)
@@ -166,7 +166,7 @@ module Zabbix
 
     def item_request(message)
       response = send_request(message)
-      response.empty? ? nil : response['itemids'][0].to_i
+      response.empty? ? nil : response['itemids'][0]
     end
 
   end

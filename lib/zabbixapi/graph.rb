@@ -44,7 +44,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response[0]['graphid'].to_i
+      response.empty? ? nil : response[0]['graphid']
     end
 
     def get_graphs(host_id)
@@ -64,7 +64,7 @@ module Zabbix
         result = {}
 
         response.each do |graph|
-          graph_id = graph['graphid'].to_i
+          graph_id = graph['graphid']
           graph_name = graph['name']
 
           result[graph_id] = graph_name
@@ -117,7 +117,7 @@ module Zabbix
 
     def graph_request(message)
       response = send_request(message)
-      response.empty? ? nil : response['graphids'].map { |id| id.to_i }
+      response.empty? ? nil : response['graphids']
     end
 
   end

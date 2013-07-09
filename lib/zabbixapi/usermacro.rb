@@ -27,7 +27,7 @@ module Zabbix
 
       unless response.empty?
         result = {
-          'id' => response[0]['hostmacroid'].to_i,
+          'id' => response[0]['hostmacroid'],
           'value'=> response[0]['value']
         }
       else
@@ -53,7 +53,7 @@ module Zabbix
 
     def macro_request(message)
       response = send_request(message)
-      response.empty? ? nil : response['hostmacroids'].map { |id| id.to_i }
+      response.empty? ? nil : response['hostmacroids']
     end
 
   end

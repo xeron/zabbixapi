@@ -6,11 +6,11 @@ API_LOGIN = "admin"
 API_PASSWORD = "zabbix"
 
 AUTHID = "a82039d56baba1f92311aa917af9939b"
-HOSTID = 10050
-APPID = 100500
+HOSTID = "10050"
+APPID = "100500"
 APPNAME = "SNMP Items"
 GROUPNAME = "Linux"
-GROUPID = 105
+GROUPID = "105"
 
 describe Zabbix::ZabbixApi do
 
@@ -43,21 +43,21 @@ describe Zabbix::ZabbixApi do
 
   context "application" do
     it "should create application" do
-      add_app_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID.to_s + '"]},"id":2}'
+      add_app_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID + '"]},"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"application\.create"/).to_return(:body => add_app_response)
 
       @zbx.add_app(HOSTID, APPNAME).should eq(APPID)
     end
 
     it "should delete application" do
-      del_app_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID.to_s + '"]},"id":2}'
+      del_app_response = '{"jsonrpc":"2.0","result":{"applicationids":["' + APPID + '"]},"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"application\.delete"/).to_return(:body => del_app_response)
 
       @zbx.del_app(APPID).should eq(APPID)
     end
 
     it "should get application id" do
-      get_app_id_response = '{"jsonrpc":"2.0","result":[{"applicationid":"' + APPID.to_s + '"}],"id":2}'
+      get_app_id_response = '{"jsonrpc":"2.0","result":[{"applicationid":"' + APPID + '"}],"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"application\.get"/).to_return(:body => get_app_id_response)
 
       @zbx.get_app_id(HOSTID, APPNAME).should eq(APPID)
@@ -67,28 +67,28 @@ describe Zabbix::ZabbixApi do
 
   context "group" do
     it "should create group" do
-      add_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID.to_s + '"]},"id":2}'
+      add_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID + '"]},"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"hostgroup\.create"/).to_return(:body => add_group_response)
 
       @zbx.add_group(GROUPNAME).should eq(GROUPID)
     end
 
     it "should delete group" do
-      del_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID.to_s + '"]},"id":2}'
+      del_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID + '"]},"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"hostgroup\.delete"/).to_return(:body => del_group_response)
 
       @zbx.del_group(GROUPID).should eq(GROUPID)
     end
 
     it "should get group id" do
-      get_group_id_response = '{"jsonrpc":"2.0","result":[{"groupid":"' + GROUPID.to_s + '"}],"id":2}'
+      get_group_id_response = '{"jsonrpc":"2.0","result":[{"groupid":"' + GROUPID + '"}],"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"hostgroup\.get"/).to_return(:body => get_group_id_response)
 
       @zbx.get_group_id(GROUPNAME).should eq(GROUPID)
     end
 
     it "should add host to group" do
-      add_host_to_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID.to_s + '"]},"id":2}'
+      add_host_to_group_response = '{"jsonrpc":"2.0","result":{"groupids":["' + GROUPID + '"]},"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"hostgroup\.massAdd"/).to_return(:body => add_host_to_group_response)
 
       @zbx.add_host_to_group(HOSTID, GROUPID).should eq(GROUPID)
@@ -101,11 +101,11 @@ describe Zabbix::ZabbixApi do
       "description" => "Free disk space on $1",
       "key_" => "vfs.fs.size[/home/aly/,free]",
       "hostid" => HOSTID,
-      "applications" => [ APPID, APPID + 1 ]
+      "applications" => [ APPID, APPID + "0" ]
     }
 
     it "should add item" do
-      add_item_response = '{"jsonrpc":"2.0","result":{"itemids":["' + HOSTID.to_s + '"]},"id":2}'
+      add_item_response = '{"jsonrpc":"2.0","result":{"itemids":["' + HOSTID + '"]},"id":2}'
       stub_request(:post, API_URL).with(:body => /"method":"item\.create"/).to_return(:body => add_item_response)
 
       @zbx.add_item(item_options).should eq(HOSTID)

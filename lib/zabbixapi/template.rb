@@ -17,7 +17,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response['templateids'][0].to_i
+      response.empty? ? nil : response['templateids'][0]
     end
 
     def get_template_ids_by_host(host_id)
@@ -34,7 +34,7 @@ module Zabbix
         result = []
 
         response.each do |template|
-          result << template['templateid'].to_i
+          result << template['templateid']
         end
       else
         result = nil
@@ -58,7 +58,7 @@ module Zabbix
 
         response.each do |template|
           template_name = template['host']
-          template_id = template['templateid'].to_i
+          template_id = template['templateid']
           result[template_id] = template_name
         end
       else
@@ -79,7 +79,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response[0]["templateid"].to_i
+      response.empty? ? nil : response[0]["templateid"]
     end
 
     def link_templates_with_hosts(templates_id, hosts_id)

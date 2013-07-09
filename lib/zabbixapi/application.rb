@@ -48,14 +48,14 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response[0]['applicationid'].to_i
+      response.empty? ? nil : response[0]['applicationid']
     end
 
     private
 
     def app_request(message)
       response = send_request(message)
-      response.empty? ? nil : response['applicationids'][0].to_i
+      response.empty? ? nil : response['applicationids'][0]
     end
 
   end

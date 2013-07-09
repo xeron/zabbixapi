@@ -30,7 +30,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response['hostids'][0].to_i
+      response.empty? ? nil : response['hostids'][0]
     end
 
     # Check host exists by given hostname.
@@ -52,7 +52,7 @@ module Zabbix
       }
 
       response = send_request(message)
-      response.empty? ? nil : response[0]['hostid'].to_i
+      response.empty? ? nil : response[0]['hostid']
     end
 
   end
