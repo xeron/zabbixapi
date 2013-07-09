@@ -69,13 +69,7 @@ module Zabbix
         'params' => [ item_options ]
       }
 
-      response = send_request(message)
-
-      unless response.empty?
-        return response['itemids'][0].to_i
-      else
-        return nil
-      end
+      item_request(message)
     end
 
     def get_item_id(host_id, item_name)
@@ -90,41 +84,59 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response[0]['itemid'].to_i
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response[0]['itemid'].to_i
     end
 
     def item_exist?(host_id, item_name)
-
-      item_id = get_item_id(host_id, item_name)
-
-      if item_id
-        return true
-      else
-        return false
-      end
+      get_item_id(host_id, item_name) ? true : false
     end
     alias item_exists? item_exist?
 
     def update_item(item_id, options)
-
       options["item_id"]
-
       message = {
         'method' => 'item.update',
         'params' => options
       }
 
+      item_request(message)
+    end
+
+    # Don't work with api < 1.8.4
+    def delete_item(item_ids)
+      message_item_ids = check_if_array(item_ids)
+      message = {
+        'method' => 'item.delete',
+        'params' => message_item_ids
+      }
+
+      response = send_request(message)
+      response.empty? ? nil : response['itemids'].map { |id| id.to_i }
+    end
+
+    def get_items_by_application(host_id, app_id)
+      message = {
+        'method' => 'item.get',
+        'params' => {
+          'hostids' => [host_id],
+          'applicationids' => [app_id],
+          'extendoutput' => true
+        }
+      }
+
+      return send_request(message)
+    end
+
+    def add_items(items)
+      message = {
+        'method' => 'item.create',
+        'params' => items
+      }
+
       response = send_request(message)
 
       unless response.empty?
-        result = response['itemids'][0]
+        result = response['itemids']
       else
         result = nil
       end
@@ -132,36 +144,29 @@ module Zabbix
       return result
     end
 
-    # Don't work with api < 1.8.4
-    def delete_item(item_ids)
+    def update_items(items)
+      message = {
+        'method' => 'item.update',
+        'params' => items
+      }
 
-      if item_ids.is_a? Array
-        message = {
-          'method' => 'item.delete',
-          'params' => item_ids
-        }
-      elsif item_ids.is_a? Fixnum or item_ids.is_a? String
-        message = {
-          'method' => 'item.delete',
-          'params' => [ item_ids ]
-        }
-      else
-        raise ZabbixError.new("Zabbix::ZabbixApi.delete_item argument error. item_ids => #{item_ids.inspect}")
-      end
+      return send_request(message)
+    end
 
+    def delete_items(itemids)
+      message = {
+        'method' => 'item.delete',
+        'params' => itemids
+      }
+
+      return send_request(message)
+    end
+
+    private
+
+    def item_request(message)
       response = send_request(message)
-
-      unless response.empty?
-        if response['itemids'].count == 1
-          result = response['itemids'][0]
-        else
-          result = response['itemids']
-        end
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response['itemids'][0].to_i
     end
 
   end

@@ -4,7 +4,6 @@ module Zabbix
   class ZabbixApi
 
     def api_version
-
       message = {
         'method' => 'apiinfo.version'
       }

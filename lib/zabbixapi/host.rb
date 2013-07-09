@@ -2,8 +2,7 @@ module Zabbix
   class ZabbixApi
 
     def add_host(host_options)
-
-      host_default = {
+      host_defaults = {
         'host' => nil,
         'port' => 10050,
         'status' => 0,
@@ -23,7 +22,7 @@ module Zabbix
 
       host_options['groups'].map! { |group_id| {'groupid' => group_id} }
 
-      host = merge_opt(host_default, host_options)
+      host = merge_opt(host_defaults, host_options)
 
       message = {
         'method' => 'host.create',
@@ -31,18 +30,18 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response['hostids'][0].to_i
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response['hostids'][0].to_i
     end
 
-    def get_host_id(hostname)
+    # Check host exists by given hostname.
+    # === Returns
+    # Boolean:: true if host exists
+    def host_exist?(hostname)
+      get_host_id(hostname) ? true : false
+    end
+    alias host_exists? host_exist?
 
+    def get_host_id(hostname)
       message = {
         'method' => 'host.get',
         'params' => {
@@ -53,14 +52,7 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response[0]['hostid'].to_i
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response[0]['hostid'].to_i
     end
 
   end

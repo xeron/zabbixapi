@@ -2,7 +2,6 @@ module Zabbix
   class ZabbixApi
 
     def add_template(template_options)
-
       template_default = {
         'host' => nil,
         'groups' => []
@@ -18,18 +17,10 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response['templateids'][0].to_i
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response['templateids'][0].to_i
     end
 
     def get_template_ids_by_host(host_id)
-
       message = {
         'method' => 'template.get',
         'params' => {
@@ -42,7 +33,7 @@ module Zabbix
       unless response.empty?
         result = []
 
-        response.each_key do |template|
+        response.each do |template|
           result << template['templateid'].to_i
         end
       else
@@ -53,7 +44,6 @@ module Zabbix
     end
 
     def get_templates
-
       message = {
         'method' => 'template.get',
         'params' => {
@@ -64,11 +54,11 @@ module Zabbix
       response = send_request(message)
 
       unless response.empty?
-        template_ids = response.keys
         result = {}
 
-        template_ids.each do |template_id|
-          template_name = response[template_id]['host']
+        response.each do |template|
+          template_name = template['host']
+          template_id = template['templateid'].to_i
           result[template_id] = template_name
         end
       else
@@ -79,7 +69,6 @@ module Zabbix
     end
 
     def get_template_id(template_name)
-
       message = {
         'method' => 'template.get',
         'params' => {
@@ -90,18 +79,10 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response.keys[0]
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response[0]["templateid"].to_i
     end
 
     def link_templates_with_hosts(templates_id, hosts_id)
-
       message_templates_id = check_if_array(templates_id)
       message_hosts_id = check_if_array(hosts_id)
 
@@ -114,16 +95,10 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        return response
-      else
-        return nil
-      end
+      response.empty? ? nil : response
     end
 
     def unlink_templates_from_hosts(templates_id, hosts_id)
-
       message_templates_id = check_if_array(templates_id)
       message_hosts_id = check_if_array(hosts_id)
 
@@ -137,22 +112,7 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        return response
-      else
-        return nil
-      end
-    end
-
-    private
-
-    def check_if_array(value)
-      if value.is_a? Array
-        return value
-      else
-        return [ value ]
-      end
+      response.empty? ? nil : response
     end
 
   end

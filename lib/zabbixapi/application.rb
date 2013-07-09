@@ -5,51 +5,31 @@ module Zabbix
     # === Returns
     # Integer:: New application id
     def add_app(host_id, app_name)
-
       message = {
         'method' => 'application.create',
         'params' => [ {'hostid' => host_id, 'name' => app_name} ]
       }
 
-      response = send_request(message)
-
-      unless response.empty?
-        return response['applicationids'][0].to_i
-      else
-        return nil
-      end
+      app_request(message)
     end
 
     # Delete application and all related information by given application id.
     # === Returns
     # Integer:: Deleted application id
     def del_app(app_id)
-
       message = {
         'method' => 'application.delete',
         'params' => [ app_id ]
       }
 
-      response = send_request(message)
-
-      unless response.empty?
-        return response['applicationids'][0].to_i
-      else
-        return nil
-      end
+      app_request(message)
     end
 
     # Check application exists by given host id and application name.
     # === Returns
     # Boolean:: true if application exists
     def app_exist?(host_id, app_name)
-      app_id = get_app_id(host_id, app_name)
-
-      if app_id
-        return true
-      else
-        return false
-      end
+      get_app_id(host_id, app_name) ? true : false
     end
     alias app_exists? app_exist?
 
@@ -57,7 +37,6 @@ module Zabbix
     # === Returns
     # Integer:: Application id
     def get_app_id(host_id, app_name)
-
       message = {
         'method' => 'application.get',
         'params' => {
@@ -69,12 +48,14 @@ module Zabbix
       }
 
       response = send_request(message)
+      response.empty? ? nil : response[0]['applicationid'].to_i
+    end
 
-      unless response.empty?
-        return response[0]['applicationid'].to_i
-      else
-        return nil
-      end
+    private
+
+    def app_request(message)
+      response = send_request(message)
+      response.empty? ? nil : response['applicationids'][0].to_i
     end
 
   end

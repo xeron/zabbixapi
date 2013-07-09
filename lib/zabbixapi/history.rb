@@ -4,28 +4,20 @@ module Zabbix
     TYPE_MAP = { String => '1', Integer => '3', Float => '0' }
 
     def get_history(itemids, type = Integer, limit = 1)
-
       message = {
-        'method'    => 'history.get',
-        'params'    => {
-          'itemids'   => itemids,
-          'limit'     => limit,
+        'method' => 'history.get',
+        'params' => {
+          'itemids' => itemids,
+          'limit' => limit,
           'sortorder' => 'DESC',
           'sortfield' => 'clock',
-          'output'    => 'extend',
-          'history'   => TYPE_MAP[type]
+          'output' => 'extend',
+          'history' => TYPE_MAP[type]
         }
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response
     end
 
   end

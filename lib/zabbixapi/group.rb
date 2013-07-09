@@ -5,7 +5,6 @@ module Zabbix
     # === Returns
     # Integer:: New group id
     def add_group(group_name)
-
       message = {
         'method' => 'hostgroup.create',
         'params' => {
@@ -13,20 +12,13 @@ module Zabbix
         }
       }
 
-      response = send_request(message)
-
-      unless response.empty?
-        return response['groupids'][0].to_i
-      else
-        return nil
-      end
+      group_request(message)
     end
 
     # Delete group by given group id.
     # === Returns
     # Integer:: Deleted group id
     def del_group(group_id)
-
       message = {
         'method' => 'hostgroup.delete',
         'params' => {
@@ -34,27 +26,14 @@ module Zabbix
         }
       }
 
-      response = send_request(message)
-
-      unless response.empty?
-        return response['groupids'][0].to_i
-      else
-        return nil
-      end
+      group_request(message)
     end
 
     # Check group exists by given group name.
     # === Returns
     # Boolean:: true if group exists
     def group_exist?(group_name)
-
-      group_id = get_group_id(group_name)
-
-      if group_id
-        return true
-      else
-        return false
-      end
+      get_group_id(group_name) ? true : false
     end
     alias group_exists? group_exist?
 
@@ -62,7 +41,6 @@ module Zabbix
     # === Returns
     # Integer:: Group id
     def get_group_id(group_name)
-
       message = {
         'method' => 'hostgroup.get',
         'params' => {
@@ -73,19 +51,13 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        return response[0]['groupid'].to_i
-      else
-        return nil
-      end
+      response.empty? ? nil : response[0]['groupid'].to_i
     end
 
     # Add host to group by given host id and group id.
     # === Returns
     # Integer:: Group id
     def add_host_to_group(host_id, group_id)
-
       message = {
         'method' => 'hostgroup.massAdd',
         'params' => {
@@ -94,13 +66,14 @@ module Zabbix
         }
       }
 
-      response = send_request(message)
+      group_request(message)
+    end
 
-      unless response.empty?
-        return response['groupids'][0].to_i
-      else
-        return nil
-      end
+    private
+
+    def group_request(message)
+      response = send_request(message)
+      response.empty? ? nil : response['groupids'][0].to_i
     end
 
   end

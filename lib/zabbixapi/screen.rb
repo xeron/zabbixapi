@@ -2,7 +2,6 @@ module Zabbix
   class ZabbixApi
 
     def get_screen_id(screen_name)
-
       message = {
         'method' => 'screen.get',
         'params' => {
@@ -13,16 +12,10 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response[0]['screenid']
-      else
-        result = nil
-      end
+      response.empty? ? nil : response[0]['screenid']
     end
 
     def get_screen_parameter(screen_name, param_name)
-
       message = {
         'method' => 'screen.get',
         'params' => {
@@ -34,18 +27,10 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response[0][param_name]
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response[0][param_name]
     end
 
     def get_screen_graph_ids(screen_id)
-
       message = {
         'method' => 'screen.get',
         'params' => {
@@ -74,7 +59,6 @@ module Zabbix
     end
 
     def set_screen_parameter(screen_id, param_name, param_value)
-
       message = {
         'method' => 'screen.update',
         'params' => {
@@ -84,18 +68,10 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = true
-      else
-        result = false
-      end
-
-      return result
+      response.empty? ? false : true
     end
 
     def del_all_graphs_from_screen(screen_id)
-
       message = {
         'method' => 'screen.deleteItems',
         'params' => {
@@ -104,16 +80,10 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        return response
-      else
-        return nil
-      end
+      response.empty? ? nil : response
     end
 
     def add_graph_to_screen(screen_id, graph_id, x, y)
-
       message = {
         'method' => 'screen.addItems',
         'params' => {
@@ -140,16 +110,10 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        return response
-      else
-        return nil
-      end
+      response.empty? ? nil : response
     end
 
     def add_screen(screen_name, hsize, vsize)
-
       message = {
         'method' => 'screen.create',
         'params' => {
@@ -160,14 +124,7 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response['screenids'][0]
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response['screenids'][0].to_i
     end
 
   end

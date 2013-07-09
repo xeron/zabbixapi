@@ -81,7 +81,7 @@ module Zabbix
         e_data = response_body_hash['error']['data']
         e_code = response_body_hash['error']['code']
 
-        error_message = "Code: #{e_code.to_s}. Data: #{e_data}. Message: #{e_message}."
+        error_message = "Code: #{e_code}. Data: #{e_data}. Message: #{e_message}."
 
         if e_code == -32602
           raise Zabbix::ZabbixError.new("Invalid params. #{error_message}.")
@@ -110,6 +110,14 @@ module Zabbix
       end
 
       return a.merge(c)
+    end
+
+    def check_if_array(value)
+      if value.is_a? Array
+        return value
+      else
+        return [ value ]
+      end
     end
 
   end

@@ -2,34 +2,23 @@ module Zabbix
   class ZabbixApi
 
     def add_macro(host_id, macro_name, macro_value)
-
       message = {
-        'method' => 'Usermacro.create',
+        'method' => 'Usermacro.massAdd',
         'params' => {
-          'hostid' => host_id,
-          'macro' => macro_name,
-          'value'=> macro_value
+          'macros' => [{'macro' => macro_name, 'value' => macro_value}],
+          'hosts'  => [{'hostid' => host_id}]
         }
       }
 
-      response = send_request(message)
-
-      if hostmacroids = response['hostmacroids']
-        result = hostmacroids
-      else
-        result = nil
-      end
-
-      return result
+      macro_request(message)
     end
 
     def get_macro(host_id, macro_name)
-
       message = {
         'method' => 'Usermacro.get',
         'params' => {
           'hostids' => host_id,
-          'macros' => macro_name,
+          'filter' => {'macro' => macro_name},
           'extendoutput' => '1'
         }
       }
@@ -37,17 +26,10 @@ module Zabbix
       response = send_request(message)
 
       unless response.empty?
-        if hostmacroid =  response[0]['hostmacroid']
-          macro_id = hostmacroid
-          macro_value = response[0]['value']
-
-          result = {
-            'id' => macro_id,
-            'value'=> macro_value
-          }
-        else
-          result = nil
-        end
+        result = {
+          'id' => response[0]['hostmacroid'].to_i,
+          'value'=> response[0]['value']
+        }
       else
         result = nil
       end
@@ -56,19 +38,22 @@ module Zabbix
     end
 
     def set_macro_value(host_id, macro_name, macro_value)
-
       message = {
-        'method' => 'usermacro.updateValue',
+        'method' => 'usermacro.massUpdate',
         'params' => {
-          'hostid' => host_id,
-          'macro' => macro_name,
-          'value' => macro_value
+          'macros' => [{'macro' => macro_name, 'value' => macro_value}],
+          'hosts'  => [{'hostid' => host_id}]
         }
       }
 
-      response = send_request(message)
+      macro_request(message)
+    end
 
-      return true
+    private
+
+    def macro_request(message)
+      response = send_request(message)
+      response.empty? ? nil : response['hostmacroids'].map { |id| id.to_i }
     end
 
   end
