@@ -134,14 +134,7 @@ module Zabbix
       }
 
       response = send_request(message)
-
-      unless response.empty?
-        result = response['itemids']
-      else
-        result = nil
-      end
-
-      return result
+      response.empty? ? nil : response['itemids']
     end
 
     def update_items(items)

@@ -3,7 +3,7 @@ module Zabbix
 
     # Create application and link to host by given host id and new application name.
     # === Returns
-    # Integer:: New application id
+    # String:: New application id
     def add_app(host_id, app_name)
       message = {
         'method' => 'application.create',
@@ -15,7 +15,7 @@ module Zabbix
 
     # Delete application and all related information by given application id.
     # === Returns
-    # Integer:: Deleted application id
+    # String:: Deleted application id
     def del_app(app_id)
       message = {
         'method' => 'application.delete',
@@ -35,7 +35,7 @@ module Zabbix
 
     # Get id of application by given host id and application name.
     # === Returns
-    # Integer:: Application id
+    # String:: Application id
     def get_app_id(host_id, app_name)
       message = {
         'method' => 'application.get',

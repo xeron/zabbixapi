@@ -3,7 +3,7 @@ module Zabbix
 
     # Create group by given group name.
     # === Returns
-    # Integer:: New group id
+    # String:: New group id
     def add_group(group_name)
       message = {
         'method' => 'hostgroup.create',
@@ -17,7 +17,7 @@ module Zabbix
 
     # Delete group by given group id.
     # === Returns
-    # Integer:: Deleted group id
+    # String:: Deleted group id
     def del_group(group_id)
       message = {
         'method' => 'hostgroup.delete',
@@ -39,7 +39,7 @@ module Zabbix
 
     # Get id of group by given group name.
     # === Returns
-    # Integer:: Group id
+    # String:: Group id
     def get_group_id(group_name)
       message = {
         'method' => 'hostgroup.get',
@@ -56,7 +56,7 @@ module Zabbix
 
     # Add host to group by given host id and group id.
     # === Returns
-    # Integer:: Group id
+    # String:: Group id
     def add_host_to_group(host_id, group_id)
       message = {
         'method' => 'hostgroup.massAdd',
