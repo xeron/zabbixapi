@@ -69,7 +69,7 @@ module Zabbix
         response.each_header do |key,value|
           puts "#{key}: #{value}"
         end
-        puts response
+        puts response.body
         puts '[ZBXAPI] : INFO : Response end'
       end
 
