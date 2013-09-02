@@ -60,17 +60,14 @@ module Zabbix
 
       response = send_request(message)
 
+      result = {}
       unless response.empty?
-        result = {}
-
         response.each do |graph|
           graph_id = graph['graphid']
           graph_name = graph['name']
 
           result[graph_id] = graph_name
         end
-      else
-        result = nil
       end
 
       return result
