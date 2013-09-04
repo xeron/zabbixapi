@@ -105,14 +105,13 @@ module Zabbix
       message = {
         'method' => 'template.massRemove',
         'params' => {
-          'hosts' => message_hosts_id,
-          'templates' => message_templates_id,
-          'force' => '1'
+          'hostids' => message_hosts_id,
+          'templateids' => message_templates_id
         }
       }
 
       response = send_request(message)
-      response.empty? ? nil : response
+      response.empty? ? nil : response["templateids"]
     end
 
   end
