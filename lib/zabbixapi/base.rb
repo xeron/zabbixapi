@@ -43,6 +43,8 @@ module Zabbix
 
       uri = URI.parse(@api_url)
       http = Net::HTTP.new(uri.host, uri.port)
+      http.open_timeout = 20
+      http.read_timeout = 20
 
       if uri.scheme == 'https'
         http.use_ssl = true
